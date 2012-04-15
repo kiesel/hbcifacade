@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import name.kiesel.hcbi.Transaction;
-import name.kiesel.hcbi.Transactions;
+import name.kiesel.hbci.Transaction;
+import name.kiesel.hbci.Transactions;
 
 /**
  *

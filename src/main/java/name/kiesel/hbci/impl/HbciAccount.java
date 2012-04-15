@@ -2,9 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
-import name.kiesel.hcbi.*;
+import name.kiesel.hbci.Transaction;
+import name.kiesel.hbci.Account;
+import name.kiesel.hbci.Session;
+import name.kiesel.hbci.Transactions;
+import name.kiesel.hbci.Balance;
+import name.kiesel.hbci.Credentials;
 
 /**
  *
@@ -16,6 +21,7 @@ public final class HbciAccount implements Account {
     private Credentials credentials;
     private Balance balance= null;
     private Transactions transactions= null;
+    private String url= null;
     private HbciVersion version= HbciVersion.V300;
 
     public HbciAccount(final String acct, final String code) {
@@ -45,7 +51,9 @@ public final class HbciAccount implements Account {
     }
 
     public Credentials getCredentials() {
-        // TODO: Clone credentials
+        if (null == this.credentials) {
+            this.credentials= new HbciCredentials();
+        }
         return this.credentials;
     }
 
@@ -76,6 +84,24 @@ public final class HbciAccount implements Account {
     public Transactions getTransactions() {
         return this.transactions;
     }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    
     
     @Override public String toString() {
         StringBuilder sb= new StringBuilder();

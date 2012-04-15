@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
-import java.util.*;
-import name.kiesel.hcbi.Account;
-import name.kiesel.hcbi.Session;
+import java.util.Iterator;
+import java.util.List;
+import name.kiesel.hbci.Session;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
@@ -24,7 +24,7 @@ import org.kapott.hbci.structures.Konto;
  *
  * @author alex
  */
-class HbciSession implements Session {
+public class HbciSession implements Session {
     private HbciAccount acct;
     private HbciVersion protocolVersion= HbciVersion.V300;
 
@@ -89,15 +89,15 @@ class HbciSession implements Session {
 
     public HbciSession(HbciAccount a) {
         this.acct = a;
+        
+        this.initialize();
     }
 
     @Override public void logIn() {
         HBCIHandler handle = this.createHbciHandler();
-        this.printSupportedGVs(handle);
     }
 
     private HBCIHandler createHbciHandler() {
-        this.initialize();
         HBCIPassport passport = AbstractHBCIPassport.getInstance();
         
         HBCIHandler handle = new HBCIHandler(this.acct.getVersion().toParam(), passport);
@@ -126,69 +126,6 @@ class HbciSession implements Session {
         HBCIUtils.setParam("client.passport.PinTan.init", "1");
     }
 
-    private void printSupportedGVs(HBCIHandler handle) {
-        Properties gvcodes = getGVCodes(handle.getPassport());
-
-        String[] codes = (String[]) gvcodes.keySet().toArray(new String[0]);
-        Arrays.sort(codes);
-
-        System.out.println();
-        System.out.println("lowlevel GVs supported by institute and HBCI4Java:");
-        for (int i = 0; i < codes.length; i++) {
-            String gvcode = codes[i];
-            String name = gvcodes.getProperty(gvcode);
-            if (!name.startsWith("Template")) {
-                System.out.println("  " + gvcode + " (" + name + ")");
-            }
-        }
-        System.out.println();
-        System.out.println("lowlevel GVs supported by institute but unknown to HBCI4Java:");
-        for (int i = 0; i < codes.length; i++) {
-            String gvcode = codes[i];
-            String name = gvcodes.getProperty(gvcode);
-            if (name.startsWith("Template")) {
-                System.out.println("  " + gvcode);
-            }
-        }
-    }
-
-    private Properties getGVCodes(HBCIPassport passport) {
-        Properties ret = new Properties();
-        Properties bpd = passport.getBPD();
-
-        for (Enumeration e = bpd.propertyNames(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-
-            if (key.startsWith("Params")
-                    && key.endsWith(".SegHead.code")) {
-                String gvcode = bpd.getProperty(key);
-
-                int dotPos = key.indexOf('.');
-                int dotPos2 = key.indexOf('.', dotPos + 1);
-
-                String gvname = key.substring(dotPos + 1, dotPos2);
-                int len = gvname.length();
-                int versionPos = -1;
-
-                for (int i = len - 1; i >= 0; i--) {
-                    char ch = gvname.charAt(i);
-                    if (!(ch >= '0' && ch <= '9')) {
-                        versionPos = i + 1;
-                        break;
-                    }
-                }
-
-                String version = gvname.substring(versionPos);
-                if (version.length() != 0) {
-                    gvname = gvname.substring(0, versionPos - 3); // remove version and "Par"
-                }
-                ret.setProperty(gvcode, gvname);
-            }
-        }
-
-        return ret;
-    }
-    
     public Konto findAccount(HBCIHandler handle) {
         Konto[] accounts= handle.getPassport().getAccounts();
         
@@ -226,8 +163,6 @@ class HbciSession implements Session {
             this.acct.getBalance().setAvailable(HbciMoney.fromValue(info.ready.value));
             this.acct.getBalance().setTimestamp(info.ready.timestamp);
         }
-        
-        System.out.println(result);
     }
 
     public void acquireTransactions() {
@@ -252,7 +187,17 @@ class HbciSession implements Session {
         for (Iterator i= lines.iterator(); i.hasNext(); ) {
             this.acct.addTransaction(HbciTransaction.fromUmsLine((UmsLine)i.next()));
         }
-        
-        System.out.println(result);
+    }
+    
+    public String bankName() {
+        return HBCIUtils.getNameForBLZ(this.acct.getBankCode());
+    }
+    
+    public String hbciHost() {
+        return HBCIUtils.getHBCIHostForBLZ(this.acct.getBankCode());
+    }
+    
+    public String hbciVersion() {
+        return HBCIUtils.getHBCIVersionForBLZ(this.acct.getBankCode());
     }
 }

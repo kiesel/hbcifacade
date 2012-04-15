@@ -1,11 +1,11 @@
-package name.kiesel.hcbifacade;
+package name.kiesel.hbcifacade;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import name.kiesel.hcbi.Account;
-import name.kiesel.hcbi.impl.HbciAccount;
-import name.kiesel.hcbi.impl.HbciCredentials;
+import name.kiesel.hbci.Account;
+import name.kiesel.hbci.impl.HbciAccount;
+import name.kiesel.hbci.impl.HbciCredentials;
 
 /**
  * Hello world!

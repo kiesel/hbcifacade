@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
 /**
  *

@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import name.kiesel.hcbi.AccountReference;
-import name.kiesel.hcbi.Money;
-import name.kiesel.hcbi.Transaction;
+import name.kiesel.hbci.AccountReference;
+import name.kiesel.hbci.Money;
+import name.kiesel.hbci.Transaction;
 import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 
 /**

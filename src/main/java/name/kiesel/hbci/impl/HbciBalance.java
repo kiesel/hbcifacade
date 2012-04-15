@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
 import java.util.Date;
-import name.kiesel.hcbi.Balance;
-import name.kiesel.hcbi.Money;
+import name.kiesel.hbci.Balance;
+import name.kiesel.hbci.Money;
 
 /**
  *

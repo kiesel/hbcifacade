@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.kiesel.hcbi.impl;
+package name.kiesel.hbci.impl;
 
-import name.kiesel.hcbi.AccountReference;
+import name.kiesel.hbci.AccountReference;
 import org.kapott.hbci.structures.Konto;
 
 /**
