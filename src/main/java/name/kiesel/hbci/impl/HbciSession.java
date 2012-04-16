@@ -25,6 +25,7 @@ import org.kapott.hbci.structures.Konto;
  * @author alex
  */
 public class HbciSession implements Session {
+    private String passportPath= "my_passport_pintan.dat";
     private HbciAccount acct;
     private HbciVersion protocolVersion= HbciVersion.V300;
 
@@ -119,11 +120,18 @@ public class HbciSession implements Session {
         HBCIUtils.setParam("kernel.rewriter", HBCIUtils.getParam("kernel.rewriter"));
 
         // Configure for PinTan
-        HBCIUtils.setParam("client.passport.default", "PinTan");
-        HBCIUtils.setParam("client.passport.PinTan.filename", "my_passport_pintan.dat");
         HBCIUtils.setParam("client.passport.PinTan.checkcert", "1");
         HBCIUtils.setParam("client.passport.PinTan.certfile", null);
         HBCIUtils.setParam("client.passport.PinTan.init", "1");
+        
+        // Set path & passport implementation for passport
+        if (null == this.passportPath) {
+            HBCIUtils.setParam("client.passport.default", "NonPersistentPinTan");
+            HBCIUtils.setParam("client.passport.PinTan.filename", null);
+        } else {
+            HBCIUtils.setParam("client.passport.default", "PinTan");
+            HBCIUtils.setParam("client.passport.PinTan.filename", this.passportPath);
+        }
     }
 
     public Konto findAccount(HBCIHandler handle) {
@@ -200,4 +208,13 @@ public class HbciSession implements Session {
     public String hbciVersion() {
         return HBCIUtils.getHBCIVersionForBLZ(this.acct.getBankCode());
     }
+
+    public String getPassportPath() {
+        return passportPath;
+    }
+
+    public void setPassportPath(String passportPath) {
+        this.passportPath = passportPath;
+    }
+    
 }
